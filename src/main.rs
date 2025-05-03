@@ -8,7 +8,7 @@ use std::time::Duration;
 #[derive(Debug, Parser)]
 struct Cli {
     /// Timeout in milliseconds
-    #[arg(long, default_value_t = 3000)]
+    #[arg(short, long, default_value_t = 3000)]
     timeout: u64,
 }
 
