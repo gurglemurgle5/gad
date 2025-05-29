@@ -10,6 +10,9 @@ struct Cli {
     /// Timeout in milliseconds
     #[arg(short, long, default_value_t = 3000)]
     timeout: u64,
+    // Show GAD value
+    #[arg(short, long)]
+    value: bool,
 }
 
 fn main() {
@@ -23,7 +26,11 @@ fn main() {
                 Ordering::Equal => "\x1b[38;2;255;255;0m",   // yellow
                 Ordering::Greater => "\x1b[38;2;0;255;255m", // cyan
             };
-            println!("{color}GAD::'{}'\x1b[0m", gad.status);
+            if cli.value {
+                println!("{color}GAD::'{}'::{}\x1b[0m", gad.status, gad.state);
+            } else {
+                println!("{color}GAD::'{}'\x1b[0m", gad.status);
+            }
         }
         Err(err) => {
             println!("\x1b[38;2;255;0;0mERROR::'{err}'");
@@ -35,6 +42,7 @@ fn main() {
 struct GadState {
     code: i32,
     status: String,
+    state: String,
 }
 
 fn get_gad(cli: &Cli) -> Result<GadState, Box<dyn Error>> {
